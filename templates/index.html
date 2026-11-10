@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MoleculeAI — Molecular Intelligence</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: { ink: "#111827", muted: "#64748b", tealish: "#0f766e" },
+        boxShadow: { soft: "0 12px 35px rgba(15,23,42,.06)" }
+      }}
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: "DM Sans", sans-serif; }
+    .nav-active { background:#ecfeff; color:#0f766e; }
+    .panel { display:none; }
+    .panel.active { display:block; }
+    .spinner { width:17px;height:17px;border:2px solid #cbd5e1;border-top-color:#0f766e;border-radius:50%;animation:spin .7s linear infinite;display:inline-block; }
+    @keyframes spin { to { transform:rotate(360deg) } }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+<div class="min-h-screen lg:flex">
+  <aside class="w-full lg:w-64 bg-white border-r border-slate-200 lg:min-h-screen lg:fixed">
+    <div class="px-6 py-6 flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-teal-700 text-white grid place-items-center font-extrabold">M</div>
+      <div><div class="font-extrabold text-lg tracking-tight">MoleculeAI</div><div class="text-xs text-slate-500">Molecular intelligence</div></div>
+    </div>
+    <div class="px-4 pb-3 text-[11px] uppercase tracking-[.16em] font-bold text-slate-400">Workspace</div>
+    <nav class="px-3 space-y-1" id="navigation">
+      <button data-panel="dashboard" class="nav-btn nav-active w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold">◫ &nbsp; Overview</button>
+      <button data-panel="analyzer" class="nav-btn w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50">⌕ &nbsp; Molecule analyzer</button>
+      <button data-panel="explain" class="nav-btn w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50">✳ &nbsp; Explainability</button>
+      <button data-panel="uncertainty" class="nav-btn w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50">◉ &nbsp; Uncertainty</button>
+      <button data-panel="benchmark" class="nav-btn w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50">▥ &nbsp; Benchmark</button>
+    </nav>
+    <div class="mx-6 my-6 border-t border-slate-100"></div>
+    <div class="px-6 text-xs text-slate-500 leading-6">
+      <div class="font-bold text-slate-700 mb-1">Research prototype</div>
+      Target: BACE1<br>Backend: Python + Flask
+      <div class="mt-3 flex items-center gap-2"><span id="health-dot" class="w-2 h-2 rounded-full bg-amber-400"></span><span id="health-text">Checking API...</span></div>
+    </div>
+  </aside>
+
+  <main class="flex-1 lg:ml-64">
+    <header class="bg-white border-b border-slate-200 px-5 md:px-9 py-5 flex flex-wrap items-center justify-between gap-3">
+      <div><p class="text-xs text-slate-400 font-semibold uppercase tracking-widest">Research workspace</p><h1 id="page-title" class="text-xl font-extrabold mt-1">Overview</h1></div>
+      <div class="text-xs px-3 py-2 rounded-full bg-teal-50 text-teal-800 font-semibold">● BACE1 activity model</div>
+    </header>
+
+    <div class="p-5 md:p-9 max-w-7xl mx-auto">
+      <section id="dashboard" class="panel active">
+        <div class="rounded-2xl bg-gradient-to-br from-slate-900 to-teal-900 text-white p-7 md:p-9 shadow-soft">
+          <div class="max-w-2xl">
+            <div class="text-teal-200 text-xs font-bold uppercase tracking-[.2em]">Molecular intelligence engine</div>
+            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight mt-3">Explore molecules.<br>Understand predictions.</h2>
+            <p class="text-slate-300 mt-4 leading-7">Analyze chemical structures and inspect your BACE1 bioactivity model's predictions, explanations, and reliability signals.</p>
+            <button onclick="showPanel('analyzer')" class="mt-6 bg-white text-slate-900 font-bold text-sm px-5 py-3 rounded-xl hover:bg-teal-50">Analyze a molecule →</button>
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-2 xl:grid-cols-4 gap-4 mt-6">
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-soft"><div class="text-xs text-slate-500 font-semibold">BIOLOGICAL TARGET</div><div class="text-2xl font-extrabold mt-2">BACE1</div><div class="text-xs text-slate-400 mt-1">Target-specific task</div></div>
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-soft"><div class="text-xs text-slate-500 font-semibold">FEATURES</div><div class="text-2xl font-extrabold mt-2">RDKit</div><div class="text-xs text-slate-400 mt-1">Fingerprints + descriptors</div></div>
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-soft"><div class="text-xs text-slate-500 font-semibold">MODEL</div><div class="text-2xl font-extrabold mt-2">Random Forest</div><div class="text-xs text-slate-400 mt-1">Your trained baseline</div></div>
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-soft"><div class="text-xs text-slate-500 font-semibold">RESEARCH TOOLS</div><div class="text-2xl font-extrabold mt-2">3 modules</div><div class="text-xs text-slate-400 mt-1">Explain · Uncertainty · Benchmark</div></div>
+        </div>
+        <div class="grid lg:grid-cols-2 gap-5 mt-6">
+          <div class="bg-white border border-slate-200 rounded-xl p-6"><h3 class="font-bold">Getting started</h3><ol class="mt-4 space-y-3 text-sm text-slate-600 list-decimal pl-5"><li>Paste a valid molecular SMILES string.</li><li>Run BACE1 activity prediction.</li><li>Review the explanation and uncertainty indicators.</li><li>Compare algorithms on the benchmark page.</li></ol></div>
+          <div class="bg-amber-50 border border-amber-200 rounded-xl p-6"><h3 class="font-bold text-amber-900">Scientific limitation</h3><p class="text-sm text-amber-900/80 mt-3 leading-6">This prototype predicts dataset-defined BACE1 activity. It does not predict whether a compound is a safe or effective medicine. Predictions require experimental validation.</p></div>
+        </div>
+      </section>
+
+      <section id="analyzer" class="panel">
+        <div class="max-w-4xl">
+          <h2 class="text-2xl font-extrabold">Molecule analyzer</h2>
+          <p class="text-sm text-slate-500 mt-2">Submit a SMILES string to calculate molecular descriptors and predict BACE1 activity.</p>
+          <div class="bg-white border border-slate-200 rounded-2xl p-5 md:p-7 mt-6 shadow-soft">
+            <label class="text-sm font-bold" for="smiles-input">Molecular SMILES</label>
+            <textarea id="smiles-input" rows="3" class="mt-2 w-full rounded-xl border border-slate-300 p-4 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-teal-600" placeholder="e.g. CC(=O)OC1=CC=CC=C1C(=O)O"></textarea>
+            <div class="flex flex-wrap gap-3 mt-4">
+              <button id="analyze-btn" onclick="analyzeMolecule()" class="bg-teal-700 hover:bg-teal-800 text-white px-5 py-3 rounded-xl text-sm font-bold">Run prediction</button>
+              <button onclick="document.getElementById('smiles-input').value='CC(=O)OC1=CC=CC=C1C(=O)O'" class="border border-slate-300 px-4 py-3 rounded-xl text-sm font-semibold">Load aspirin example</button>
+            </div>
+            <div id="analyze-error" class="hidden mt-4 text-sm text-red-700 bg-red-50 rounded-lg p-3"></div>
+          </div>
+          <div id="analysis-result" class="hidden mt-6 space-y-4">
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-soft">
+              <div class="flex flex-wrap justify-between gap-3"><div><div class="text-xs text-slate-400 uppercase font-bold tracking-widest">Prediction result</div><h3 id="prediction-label" class="text-2xl font-extrabold mt-2"></h3></div><div id="prediction-pill" class="h-fit px-3 py-2 rounded-full text-sm font-bold"></div></div>
+              <div class="mt-6"><div class="flex justify-between text-sm mb-2"><span class="text-slate-500">Active-class model score</span><strong id="active-score"></strong></div><div class="h-3 bg-slate-100 rounded-full overflow-hidden"><div id="active-bar" class="h-full bg-teal-600 rounded-full" style="width:0%"></div></div></div>
+              <p id="scientific-note" class="text-xs text-slate-500 mt-5 leading-5"></p>
+            </div>
+            <div><h3 class="font-bold mb-3">Molecular descriptors</h3><div id="descriptor-grid" class="grid grid-cols-2 md:grid-cols-3 gap-3"></div></div>
+            <div class="flex flex-wrap gap-3"><button onclick="runExplain()" class="bg-slate-900 text-white px-4 py-3 rounded-xl text-sm font-bold">Explain prediction</button><button onclick="runUncertainty()" class="border border-slate-300 bg-white px-4 py-3 rounded-xl text-sm font-bold">Assess uncertainty</button></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="explain" class="panel">
+        <h2 class="text-2xl font-extrabold">Explainability</h2><p class="text-sm text-slate-500 mt-2">Inspect which model features influence the active-class score.</p>
+        <div class="mt-6 bg-white border border-slate-200 rounded-2xl p-6 shadow-soft">
+          <p class="text-sm text-slate-600">Uses the SMILES currently entered in the Molecule Analyzer.</p>
+          <button onclick="runExplain()" class="mt-4 bg-teal-700 text-white px-5 py-3 rounded-xl text-sm font-bold">Generate explanation</button>
+          <div id="explain-output" class="mt-5"></div>
+        </div>
+      </section>
+
+      <section id="uncertainty" class="panel">
+        <h2 class="text-2xl font-extrabold">Uncertainty analysis</h2><p class="text-sm text-slate-500 mt-2">Review probability entropy, model-tree disagreement, and chemical-space similarity.</p>
+        <div class="mt-6 bg-white border border-slate-200 rounded-2xl p-6 shadow-soft">
+          <p class="text-sm text-slate-600">Uses the SMILES currently entered in the Molecule Analyzer.</p>
+          <button onclick="runUncertainty()" class="mt-4 bg-teal-700 text-white px-5 py-3 rounded-xl text-sm font-bold">Assess reliability</button>
+          <div id="uncertainty-output" class="mt-5"></div>
+        </div>
+      </section>
+
+      <section id="benchmark" class="panel">
+        <h2 class="text-2xl font-extrabold">Model benchmark</h2><p class="text-sm text-slate-500 mt-2">Run the scaffold-split comparison from your Python benchmarking module.</p>
+        <div class="mt-6 bg-white border border-slate-200 rounded-2xl p-6 shadow-soft">
+          <div class="flex flex-wrap items-center justify-between gap-4"><div><h3 class="font-bold">Validation comparison</h3><p class="text-xs text-slate-500 mt-1">This may take a little while on your computer.</p></div><button id="benchmark-btn" onclick="runBenchmark()" class="bg-teal-700 text-white px-5 py-3 rounded-xl text-sm font-bold">Run benchmark</button></div>
+          <div id="benchmark-output" class="mt-5 overflow-x-auto"></div>
+        </div>
+      </section>
+
+      <footer class="text-xs text-slate-400 py-8">MoleculeAI research prototype · BACE1 bioactivity · Not for clinical decision-making</footer>
+    </div>
+  </main>
+</div>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
